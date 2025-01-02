@@ -1,0 +1,8 @@
+node_modules/
+.env
+.idea/
+*.log
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
