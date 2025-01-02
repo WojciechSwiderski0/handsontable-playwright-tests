@@ -6,3 +6,5 @@
    npm install
    npx playwright test #to run tests
    npx playwright show-report #to show report
+
+Tests are in ./tests/handsontable.spec.ts
