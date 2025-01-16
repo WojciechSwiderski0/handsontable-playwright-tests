@@ -19,8 +19,7 @@ test.describe('Handsontable Demo Page', () => {
         await page.locator('.htUIButton [value="OK"]').click();
         //3.Sort Filtered Data by Date:
         const dateColumnHeader = `.ht_master th:has(span:has-text("${DATE_LABEL}"))`;
-        await page.locator(dateColumnHeader).click({ force: true });
-        await page.locator(dateColumnHeader).click({ force: true });
+        await page.locator(dateColumnHeader).dblclick({ force: true, delay: 300 });
         //4.Verify Results:
         const countryCells = page.locator(`.ht_master tbody td[aria-colindex="${COUNTRY_COL_INDEX}"]`);
         const countryValues = await countryCells.allTextContents();
