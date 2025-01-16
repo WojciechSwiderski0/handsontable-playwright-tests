@@ -16,19 +16,21 @@ test.describe('Handsontable Demo Page', () => {
         await expect(page.locator('.htDropdownMenu')).toBeVisible();
         await page.locator('.htUISelectionControls a:has-text("Clear")').click();
         await page.locator('.htCheckboxRendererLabel:has-text("' + COUNTRY + '")').click();
+        await page.locator('.htUIButton [value="OK"]').click();
         //3.Sort Filtered Data by Date:
         const dateColumnHeader = `.ht_master th:has(span:has-text("${DATE_LABEL}"))`;
         await page.locator(dateColumnHeader).click({ force: true });
         await page.locator(dateColumnHeader).click({ force: true });
         //4.Verify Results:
-        const countryCells = page.locator(`.ht_master tbody td:has([aria-colindex="${COUNTRY_COL_INDEX}"])`);
+        const countryCells = page.locator(`.ht_master tbody td[aria-colindex="${COUNTRY_COL_INDEX}"]`);
         const countryValues = await countryCells.allTextContents();
         for (const value of countryValues) {
-            expect(value).toBe(COUNTRY);
+            expect(value.replace("▼", "")).toBe(COUNTRY);
         }
 
         const dateCells = page.locator(`.ht_master tbody td[aria-colindex="${DATE_COL_INDEX}"]`);
-        const dateValues = await dateCells.allTextContents();
+        let dateValues = await dateCells.allTextContents();
+        dateValues = dateValues.map(value => value.replace("▼", ""));
         const sortedDates = [...dateValues].sort((a, b) => {
             const dateA = new Date(a);
             const dateB = new Date(b);
