@@ -19,12 +19,15 @@ test.describe('Handsontable Demo Page', () => {
         await page.locator('.htUIButton [value="OK"]').click();
         //3.Sort Filtered Data by Date:
         const dateColumnHeader = `.ht_master th:has(span:has-text("${DATE_LABEL}"))`;
-        const dateColumnHeaderAscending = `.ht_master th:has(span:has-text("${DATE_LABEL}")) .ascending`;
-        const dateColumnHeaderDescending = `.ht_master th:has(span:has-text("${DATE_LABEL}")) .descending`;
+        await page.locator(dateColumnHeader).scrollIntoViewIfNeeded();
+        const dateColumnHeaderAscending = `.ht_master th span.ascending`;
+        const dateColumnHeaderDescending = `.ht_master th span.descending`;
+        
+        await expect(page.locator(dateColumnHeader)).toHaveCount(1)
         await page.locator(dateColumnHeader).click({force:true, delay: 100});
-        await expect(page.locator(dateColumnHeaderAscending)).toBeVisible
+        await expect(page.locator(dateColumnHeaderAscending)).toHaveCount(1);
         await page.locator(dateColumnHeader).click({force:true, delay: 100});
-        await expect(page.locator(dateColumnHeaderDescending)).toBeVisible
+        await expect(page.locator(dateColumnHeaderDescending)).toHaveCount(1);
         //4.Verify Results:
         const countryCells = page.locator(`.ht_master tbody td[aria-colindex="${COUNTRY_COL_INDEX}"]`);
         const countryValues = await countryCells.allTextContents();
@@ -35,12 +38,12 @@ test.describe('Handsontable Demo Page', () => {
         const dateCells = page.locator(`.ht_master tbody td[aria-colindex="${DATE_COL_INDEX}"]`);
         let dateValues = await dateCells.allTextContents();
         dateValues = dateValues.map(value => value.replace("▼", ""));
-        const sortedDates = [...dateValues].sort((a, b) => {
+        const sortedDates =  [...dateValues].sort((a, b) => {
             const dateA = new Date(a);
             const dateB = new Date(b);
             return dateB.getTime() - dateA.getTime();
           });
-        expect(dateValues).toEqual(sortedDates);
+        await expect(dateValues).toEqual(sortedDates);
     });
 
 })
